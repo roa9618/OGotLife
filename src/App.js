@@ -1,5 +1,7 @@
-import logo from './assets/ogotlife_logo.png';
+import React from 'react';
 import './styles/App.css';
+import logo from './assets/ogotlife_logo.png';
+import Footer from './components/footer.js';
 
 function App() {
   return (
