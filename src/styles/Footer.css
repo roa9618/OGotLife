@@ -1,11 +1,12 @@
 .footer {
-    color: #ffffff;
+    color: #999999;
     height: 90px;
     display: flex;
     font-size: 13px;
     font-family: 'Wanted Sans', sans-serif;
     font-weight: 400;
+    border-top: 1px solid #DDDDDD;
     align-items: center;
     justify-content: center;
-    background-color: #373849;
+    background-color: #EEF1F9;
   }
