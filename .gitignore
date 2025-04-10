@@ -1,7 +1,15 @@
-# macOS 관련
+# macOS
 .DS_Store
 
-# Node.js 관련
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+~$*
+$RECYCLE.BIN/
+*.lnk
+
+# Node.js
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -9,43 +17,35 @@ yarn-error.log*
 package-lock.json
 .pnpm-debug.log*
 
+# 환경변수 파일
+.env
+.env.local
+.env.*.local
+
 # 빌드 결과물
 /build
 /dist
 
-# 환경 변수
-.env
-.env.*.local
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# 테스트 결과
+/coverage
 
-# IDE 및 에디터 설정
+# 로그
+*.log
+
+# IDE 설정
 .vscode/
 .idea/
 *.sublime-workspace
 *.sublime-project
 
-# 시스템 파일
-Thumbs.db
-ehthumbs.db
-Desktop.ini
+# Storybook
+storybook-static/
 
-# 테스트 관련
-/coverage
-
-# 로그 파일
-*.log
-
-# Parcel, Next.js 등 일부 툴 관련
+# 캐시
 .cache/
 .next/
 out/
 
-# Storybook
-storybook-static/
-
 # 기타
-*.swp
 *.tmp
+*.swp
