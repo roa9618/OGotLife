@@ -1,0 +1,13 @@
+@import url('https://fastly.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css');
+
+.footer {
+    color: #ffffff;
+    height: 90px;
+    display: flex;
+    font-size: 13px;
+    font-family: 'Wanted Sans', sans-serif;
+    font-weight: 400;
+    align-items: center;
+    justify-content: center;
+    background-color: #373849;
+  }
