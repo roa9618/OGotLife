@@ -1,16 +1,21 @@
 .header {
     height: 80px;
     display: flex;
-    padding: 0 2rem;
-    font-family: "Wanted Sans", sans-serif;
     align-items: center;
     justify-content: space-between;
-    background-color: #FFFFFF;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(77, 111, 238, 0.08);
+    padding: 0 60px 0 0;
+    position: relative;
+    z-index: 10;
 }
 
 .logo {
     width: 119.03px;
     height: 40px;
+    margin-left: 53px;
+    display: flex;
+    align-items: center;
 }
 
 .menu ul {
@@ -22,11 +27,12 @@
 }
 
 .menu a {
-    color: #111111;
+    color: #111;
     font-size: 16px;
     font-weight: 400;
-    transition: color, 0.2s ease, background-color, 0.2s ease;
+    transition: color 0.2s, background-color 0.2s;
     text-decoration: none;
+    padding: 4px 0;
 }
 
 .menu a:hover {
@@ -35,6 +41,16 @@
 
 .alarm_image {
     margin-right: 30px;
+    width: 30px;
+    height: 30px;
+}
+
+.profile_image {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    margin-right: 1px;
+    object-fit: cover;
 }
 
 .right_section {
@@ -43,9 +59,16 @@
 }
 
 .right_section a {
-    color: #111111;
+    color: #111;
     font-size: 16px;
     font-weight: 700;
     margin-left: 10px;
     text-decoration: none;
+}
+
+.profile_side_icon {
+    width: 10px;
+    height: 10px;
+    margin-left: 5px;
+    vertical-align: middle;
 }
