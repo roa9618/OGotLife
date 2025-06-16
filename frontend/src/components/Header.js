@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import '../styles/Header.css';
+import { NavLink, useNavigate, Link } from "react-router-dom";
+import "../styles/Header.css";
 import logo_image from '../assets/ogotlife_logo.png';
 import alarm_image from '../assets/alarm_image.png';
 import profile_image from '../assets/default_profile_image.png';
@@ -20,6 +20,7 @@ function Header() {
     const [showAlarmMenu, setShowAlarmMenu] = useState(false);
     const profileNameRef = useRef(null);
     const alarmRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -175,26 +176,36 @@ function Header() {
                     </span>
                     {showProfileMenu && (
                         <div className="profile-dropdown-menu">
-                            <ul>
+                            <ul className="profile-dropdown-menu-list">
                                 <li>
-                                    <img src={user} alt="" className="profile-menu-icon" />
-                                    내 프로필 보기
+                                    <Link to="/profile" className="profile-dropdown-link">
+                                        <img src={user} alt="" className="profile-menu-icon" />
+                                        내 프로필 보기
+                                    </Link>
                                 </li>
                                 <li>
-                                    <img src={setting} alt="" className="profile-menu-icon" />
-                                    계정 설정
+                                    <Link to="/account-setting" className="profile-dropdown-link">
+                                        <img src={setting} alt="" className="profile-menu-icon" />
+                                        계정 설정
+                                    </Link>
                                 </li>
                                 <li>
-                                    <img src={laptop} alt="" className="profile-menu-icon" />
-                                    환경 설정
+                                    <Link to="/preference-setting" className="profile-dropdown-link">
+                                        <img src={laptop} alt="" className="profile-menu-icon" />
+                                        환경 설정
+                                    </Link>
                                 </li>
                                 <li>
-                                    <img src={message} alt="" className="profile-menu-icon" />
-                                    문의하기
+                                    <Link to="/contact" className="profile-dropdown-link">
+                                        <img src={message} alt="" className="profile-menu-icon" />
+                                        문의하기
+                                    </Link>
                                 </li>
                                 <li>
-                                    <img src={logout} alt="" className="profile-menu-icon" />
-                                    로그아웃
+                                    <Link to="/logout" className="profile-dropdown-link">
+                                        <img src={logout} alt="" className="profile-menu-icon" />
+                                        로그아웃
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

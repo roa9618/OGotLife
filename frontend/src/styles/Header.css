@@ -150,9 +150,27 @@
     cursor: pointer;
     transition: background 0.13s, color 0.13s;
     border-radius: 8px;
+    line-height: 1.4;
 }
 
-.profile-dropdown-menu li:hover {
+.profile-dropdown-link {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: inherit;
+    color: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+
+.profile-dropdown-link:focus {
+    outline: none;
+}
+
+.profile-dropdown-menu-list li:hover,
+.profile-dropdown-menu-list li:hover .profile-dropdown-link {
     background: #f4f6fb;
     color: #4e6cff;
 }
@@ -162,6 +180,8 @@
     height: 22px;
     flex-shrink: 0;
     display: inline-block;
+    vertical-align: middle;
+    margin-right: 2px;
 }
 
 .header-alarm-wrap {
