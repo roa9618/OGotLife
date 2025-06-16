@@ -11,6 +11,8 @@ import Community from './pages/Community';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import FindAccount from './pages/FindAccount';
+import CommunityWrite from "./pages/CommunityWrite";
+import CommunityPostView from "./pages/CommunityPostView";
 
 function BlurOverlay({ onLoginClick }) {
   return (
@@ -46,6 +48,8 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn }) {
         <Route path="/login" element={<Login onLogin={() => setIsLoggedIn(true)}/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/find-account" element={<FindAccount/>}/>
+        <Route path="/community/write" element={<CommunityWrite/>}/>
+        <Route path="/community/post/:postId" element={<CommunityPostView/>}/>
       </Routes>
       {(!isLoggedIn && !isAuthPage) && (
         <BlurOverlay onLoginClick={() => navigate('/login')}/>
