@@ -1,49 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import axios from 'axios';
 import '../styles/Todo.css';
 
 function Todo() {
-    const [todos, setTodos] = useState([
-        { id: 1, text: '수학 숙제', done: false },
-        { id: 2, text: '영어 단어 외우기', done: true },
-        { id: 3, text: '운동 30분', done: false },
-    ]);
-    const [routines, setRoutines] = useState([
-        { id: 1, title: '아침 운동', icon: '💪', checked: false },
-        { id: 2, title: '영어 단어 암기', icon: '📚', checked: false },
-    ]);
+    const [todos, setTodos] = useState([]);
+    const [routines, setRoutines] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [newTodo, setNewTodo] = useState('');
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
 
-    const handleAddTodo = (e) => {
+    useEffect(() => {
+        if (!userId) return;
+        axios.get(`/api/todo/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setTodos(res.data));
+        axios.get(`/api/routine/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setRoutines(res.data));
+    }, [userId, token]);
+
+    const handleAddTodo = async (e) => {
         e.preventDefault();
         if (!newTodo.trim()) return;
-        setTodos([
-            ...todos,
-            {
-                id: Date.now(),
-                text: newTodo,
-                done: false
-            }
-        ]);
+        await axios.post('/api/todo', {
+            text: newTodo,
+            done: false,
+            user: { id: userId }
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         setNewTodo('');
         setModalOpen(false);
+        // 목록 새로고침
+        const res = await axios.get(`/api/todo/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setTodos(res.data);
     };
 
-    const handleToggle = (id) => {
-        setTodos(todos.map(todo =>
-            todo.id === id ? { ...todo, done: !todo.done } : todo
-        ));
+    const handleToggle = async (id, done) => {
+        await axios.put(`/api/todo/${id}`, { done: !done }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        // 목록 새로고침
+        const res = await axios.get(`/api/todo/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setTodos(res.data);
     };
 
-    const handleDelete = (id) => {
-        setTodos(todos.filter(todo => todo.id !== id));
+    const handleDelete = async (id) => {
+        await axios.delete(`/api/todo/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        // 목록 새로고침
+        const res = await axios.get(`/api/todo/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setTodos(res.data);
     };
 
-    const handleRoutineCheck = (id) => {
+    // 루틴 체크는 실제로는 루틴 기반 투두로 연동 필요(여기선 단순 체크만)
+    const handleRoutineCheck = async (routineId, checked) => {
+        // 루틴 기반 투두 생성/완료 처리 등 백엔드 연동 필요
+        // 예시: await axios.post(`/api/todo`, { ... });
         setRoutines(routines.map(r =>
-            r.id === id ? { ...r, checked: !r.checked } : r
+            r.id === routineId ? { ...r, checked: !checked } : r
         ));
     };
 
@@ -67,7 +92,7 @@ function Todo() {
                                         type="checkbox"
                                         className="todo-routine-check"
                                         checked={routine.checked}
-                                        onChange={() => handleRoutineCheck(routine.id)}
+                                        onChange={() => handleRoutineCheck(routine.id, routine.checked)}
                                     />
                                     <span className="todo-routine-icon">{routine.icon}</span>
                                     <span className="todo-routine-title">{routine.title}</span>
@@ -86,7 +111,7 @@ function Todo() {
                                 <input
                                     type="checkbox"
                                     checked={todo.done}
-                                    onChange={() => handleToggle(todo.id)}
+                                    onChange={() => handleToggle(todo.id, todo.done)}
                                     className="todo-checkbox"
                                 />
                                 <span className="todo-card-text">{todo.text}</span>

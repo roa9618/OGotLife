@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import axios from 'axios';
 import '../styles/FocusMode.css';
 
 function formatTime(sec) {
@@ -15,6 +16,15 @@ function FocusMode() {
     const [history, setHistory] = useState([]);
     const [desc, setDesc] = useState('');
     const timerRef = useRef(null);
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (!userId) return;
+        axios.get(`/api/focus/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setHistory(res.data));
+    }, [userId, token]);
 
     const handleStart = () => {
         setIsFocusing(true);
@@ -28,24 +38,32 @@ function FocusMode() {
         clearInterval(timerRef.current);
     };
 
-    const handleSave = (e) => {
+    const handleSave = async (e) => {
         e.preventDefault();
         if (!desc.trim()) return;
-        setHistory([
-            { id: Date.now(), time, desc },
-            ...history
-        ]);
+        await axios.post('/api/focus', {
+            duration: time,
+            description: desc,
+            user: { id: userId }
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         setTime(0);
         setDesc('');
+        // 목록 새로고침
+        const res = await axios.get(`/api/focus/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setHistory(res.data);
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         return () => clearInterval(timerRef.current);
     }, []);
 
     const todayStr = new Date().toISOString().slice(0, 10);
     const todayHistory = history.filter(item => {
-        const itemDate = new Date(item.id).toISOString().slice(0, 10);
+        const itemDate = item.createdAt ? item.createdAt.slice(0, 10) : '';
         return itemDate === todayStr;
     });
 
@@ -87,8 +105,8 @@ function FocusMode() {
                     )}
                     {todayHistory.map(item => (
                         <div className="focus-history-card" key={item.id}>
-                            <span className="focus-history-time">{formatTime(item.time)}</span>
-                            <span className="focus-history-desc">{item.desc}</span>
+                            <span className="focus-history-time">{formatTime(item.duration)}</span>
+                            <span className="focus-history-desc">{item.description}</span>
                         </div>
                     ))}
                 </div>

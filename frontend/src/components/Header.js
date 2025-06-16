@@ -14,12 +14,16 @@ import alarmComment from '../assets/header_alarm_message.png';
 import alarmLike from '../assets/header_alarm_heart.png';
 import alarmNotice from '../assets/header_alarm_check.png';
 import alarmReply from '../assets/header_alarm_comment.png';
+import axios from 'axios';
 
 function Header() {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [showAlarmMenu, setShowAlarmMenu] = useState(false);
+    const [alarms, setAlarms] = useState([]);
     const profileNameRef = useRef(null);
     const alarmRef = useRef(null);
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -35,6 +39,14 @@ function Header() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        // 알림 목록 불러오기
+        if (!userId || !token) return;
+        axios.get(`/api/notification/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setAlarms(res.data || []));
+    }, [userId, token, showAlarmMenu]);
+
     const handleProfileMenuToggle = () => {
         setShowProfileMenu((prev) => !prev);
         setShowAlarmMenu(false);
@@ -45,28 +57,31 @@ function Header() {
         setShowProfileMenu(false);
     };
 
-    const alarms = [
-        {
-            icon: alarmComment,
-            content: <><b>홍길동</b>님이 댓글을 남겼습니다.</>,
-            time: "1시간전"
-        },
-        {
-            icon: alarmLike,
-            content: <><b>홍길동</b>님이 공감을 남겼습니다.</>,
-            time: "2시간전"
-        },
-        {
-            icon: alarmNotice,
-            content: <> <b>아침일찍 일어나는법</b>의 조회수가 <b>100</b>이 넘었습니다.</>,
-            time: "7시간전"
-        },
-        {
-            icon: alarmReply,
-            content: <>문의사항에 답변이 달렸습니다.</>,
-            time: "1일전"
+    const handleLogout = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post('/api/user/logout', {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        } catch (e) {
+            // ignore
         }
-    ];
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+    };
+
+    // 모두 읽음 처리
+    const handleReadAll = async () => {
+        if (!userId || !token) return;
+        await axios.post('/api/notification/read-all', { userId }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        // 알림 목록 새로고침
+        const res = await axios.get(`/api/notification/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setAlarms(res.data || []);
+    };
 
     return (
         <header className="header">
@@ -109,18 +124,29 @@ function Header() {
                     {showAlarmMenu && (
                         <div className="alarm-dropdown-menu">
                             <ul className="alarm-list">
+                                {alarms.length === 0 && (
+                                    <li className="alarm-item">알림이 없습니다.</li>
+                                )}
                                 {alarms.map((alarm, idx) => (
-                                    <li className="alarm-item" key={idx}>
-                                        <img src={alarm.icon} alt="" className="alarm-item-icon" />
+                                    <li className="alarm-item" key={alarm.id || idx}>
+                                        <img src={
+                                            alarm.type === "comment" ? alarmComment :
+                                            alarm.type === "like" ? alarmLike :
+                                            alarm.type === "notice" ? alarmNotice :
+                                            alarm.type === "reply" ? alarmReply :
+                                            alarmComment
+                                        } alt="" className="alarm-item-icon" />
                                         <div className="alarm-item-content">
-                                            <div className="alarm-item-text">{alarm.content}</div>
-                                            <div className="alarm-item-time">{alarm.time}</div>
+                                            <div className="alarm-item-text">{alarm.message}</div>
+                                            <div className="alarm-item-time">
+                                                {alarm.createdAt ? alarm.createdAt.replace('T', ' ').slice(0, 16) : ''}
+                                            </div>
                                         </div>
                                     </li>
                                 ))}
                             </ul>
                             <div className="alarm-menu-bottom">
-                                <button className="alarm-menu-btn read-all">모두 읽음 처리</button>
+                                <button className="alarm-menu-btn read-all" onClick={handleReadAll}>모두 읽음 처리</button>
                                 <button className="alarm-menu-btn more">더보기</button>
                             </div>
                         </div>
@@ -201,7 +227,7 @@ function Header() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="/logout" className="profile-dropdown-link">
+                                    <Link to="/logout" className="profile-dropdown-link" onClick={e => { e.preventDefault(); handleLogout(); }}>
                                         <img src={logout} alt="" className="profile-menu-icon" />
                                         로그아웃
                                     </Link>

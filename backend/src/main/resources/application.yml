@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:ogotlife;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  mail:
+    host: smtp.naver.com # 또는 gmail 등
+    port: 465
+    username: your_email@naver.com
+    password: your_password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: true
+jwt:
+  secret: "ogotlife-secret-key-very-long-for-jwt"
+server:
+  port: 8080
+file:
+  upload-dir: uploads

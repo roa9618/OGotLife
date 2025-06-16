@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/Login.css';
 
 function FindAccount() {
@@ -7,17 +8,50 @@ function FindAccount() {
     const [email, setEmail] = useState('');
     const [id, setId] = useState('');
     const [result, setResult] = useState('');
+    const [verifyCode, setVerifyCode] = useState('');
+    const [sentCode, setSentCode] = useState(false);
+    const [verified, setVerified] = useState(false);
 
-    const handleIdFind = (e) => {
+    // 아이디 찾기(이메일 인증코드 발송/확인)
+    const handleSendCode = async (e) => {
         e.preventDefault();
-        // 실제 서비스에서는 이메일로 아이디 찾기 로직 필요
-        setResult('입력하신 이메일로 가입된 아이디는 example_id 입니다.');
+        setResult('');
+        try {
+            await axios.post('/api/user/send-verify-code', { email });
+            setSentCode(true);
+            alert('인증코드가 이메일로 발송되었습니다.');
+        } catch (err) {
+            alert('인증코드 발송 실패: ' + (err.response?.data || ''));
+        }
     };
 
-    const handlePwFind = (e) => {
+    const handleVerifyCode = async (e) => {
         e.preventDefault();
-        // 실제 서비스에서는 아이디+이메일로 비밀번호 재설정 메일 발송 로직 필요
-        setResult('입력하신 정보로 비밀번호 재설정 메일을 전송했습니다.');
+        try {
+            const res = await axios.post('/api/user/verify-code', { email, code: verifyCode });
+            if (res.data.verified) {
+                setVerified(true);
+                // 실제 아이디 찾기
+                const idRes = await axios.post('/api/find-account/find-id', { email });
+                setResult(`입력하신 이메일로 가입된 아이디는 ${idRes.data} 입니다.`);
+            } else {
+                alert('인증코드가 올바르지 않습니다.');
+            }
+        } catch (err) {
+            alert('인증 실패: ' + (err.response?.data || ''));
+        }
+    };
+
+    // 비밀번호 찾기(임시 비밀번호 발송)
+    const handlePwFind = async (e) => {
+        e.preventDefault();
+        setResult('');
+        try {
+            await axios.post('/api/find-account/reset-password', { username: id, email });
+            setResult('입력하신 정보로 임시 비밀번호가 이메일로 발송되었습니다.');
+        } catch (err) {
+            setResult('비밀번호 찾기 실패: ' + (err.response?.data || ''));
+        }
     };
 
     return (
@@ -27,7 +61,7 @@ function FindAccount() {
                 <div className="findaccount-tab-row">
                     <button
                         className={`findaccount-tab-btn${tab === 'id' ? ' active' : ''}`}
-                        onClick={() => { setTab('id'); setResult(''); }}
+                        onClick={() => { setTab('id'); setResult(''); setSentCode(false); setVerified(false); }}
                         type="button"
                     >
                         아이디 찾기
@@ -41,17 +75,33 @@ function FindAccount() {
                     </button>
                 </div>
                 {tab === 'id' ? (
-                    <form onSubmit={handleIdFind} className="login-form">
-                        <input
-                            type="email"
-                            placeholder="가입한 이메일"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            className="login-input"
-                            required
-                        />
-                        <button type="submit" className="login-btn">아이디 찾기</button>
-                    </form>
+                    !sentCode ? (
+                        <form onSubmit={handleSendCode} className="login-form">
+                            <input
+                                type="email"
+                                placeholder="가입한 이메일"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                className="login-input"
+                                required
+                            />
+                            <button type="submit" className="login-btn">인증코드 받기</button>
+                        </form>
+                    ) : !verified ? (
+                        <form onSubmit={handleVerifyCode} className="login-form">
+                            <input
+                                type="text"
+                                placeholder="이메일로 받은 인증코드"
+                                value={verifyCode}
+                                onChange={e => setVerifyCode(e.target.value)}
+                                className="login-input"
+                                required
+                            />
+                            <button type="submit" className="login-btn">인증코드 확인</button>
+                        </form>
+                    ) : (
+                        <div className="login-result">{result}</div>
+                    )
                 ) : (
                     <form onSubmit={handlePwFind} className="login-form">
                         <input

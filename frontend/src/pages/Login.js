@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/Login.css';
 
-function Login() {
+function Login({ onLogin }) {
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // 로그인 로직 (예시)
-        alert('로그인 시도: ' + id);
+        setLoading(true);
+        try {
+            const res = await axios.post('/api/user/login', {
+                username: id,
+                password: pw
+            });
+            if (res.data && res.data.token) {
+                localStorage.setItem('token', res.data.token);
+                if (onLogin) onLogin();
+            } else {
+                alert('로그인 실패');
+            }
+        } catch (err) {
+            alert('로그인 실패: ' + (err.response?.data || ''));
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -32,7 +49,9 @@ function Login() {
                         onChange={e => setPw(e.target.value)}
                         className="login-input"
                     />
-                    <button type="submit" className="login-btn">로그인</button>
+                    <button type="submit" className="login-btn" disabled={loading}>
+                        {loading ? '로그인 중...' : '로그인'}
+                    </button>
                 </form>
                 <div className="login-bottom">
                     <Link to="/signup" className="login-link">회원가입</Link>

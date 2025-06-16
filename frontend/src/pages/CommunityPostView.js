@@ -1,44 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/CommunityPostView.css";
 import { useNavigate, useParams } from "react-router-dom";
-
-const dummyPost = {
-    id: 1,
-    title: "예시 글 제목",
-    content: "이곳에 글 내용이 표시됩니다.",
-    author: "작성자",
-    date: "2024-06-01",
-    likes: 5,
-};
-
-const dummyComments = [
-    { id: 1, author: "댓글러1", content: "좋은 글이네요!", date: "2024-06-01" },
-    { id: 2, author: "댓글러2", content: "동의합니다.", date: "2024-06-02" },
-];
+import axios from "axios";
 
 function CommunityPostView() {
     const { postId } = useParams();
-    const [comments, setComments] = useState(dummyComments);
+    const [post, setPost] = useState(null);
+    const [comments, setComments] = useState([]);
     const [comment, setComment] = useState("");
-    const [likes, setLikes] = useState(dummyPost.likes);
+    const [likes, setLikes] = useState(0);
     const navigate = useNavigate();
 
-    const handleLike = () => setLikes(likes + 1);
-    const handleReport = () => alert("신고가 접수되었습니다.");
-    const handleCommentSubmit = (e) => {
+    useEffect(() => {
+        axios.get(`/api/community/post/${postId}`)
+            .then(res => {
+                setPost(res.data);
+                setLikes(res.data.likeCount || 0);
+            });
+        axios.get(`/api/community/post/${postId}/comments`)
+            .then(res => setComments(res.data));
+    }, [postId]);
+
+    const handleLike = async () => {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+        await axios.post(`/api/community/post/${postId}/like`, { userId }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        // 좋아요 개수 재조회
+        const res = await axios.get(`/api/community/post/${postId}`);
+        setLikes(res.data.likeCount || 0);
+    };
+
+    const handleReport = async () => {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+        const reason = window.prompt("신고 사유를 입력하세요.");
+        if (!reason) return;
+        await axios.post(`/api/community/post/${postId}/report`, { userId, reason }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        alert("신고가 접수되었습니다.");
+    };
+
+    const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (!comment.trim()) return;
-        setComments([
-            ...comments,
-            {
-                id: comments.length + 1,
-                author: "나",
-                content: comment,
-                date: new Date().toISOString().slice(0, 10),
-            },
-        ]);
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+        await axios.post(`/api/community/post/${postId}/comment`, {
+            content: comment,
+            author: username
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         setComment("");
+        // 댓글 목록 재조회
+        const res = await axios.get(`/api/community/post/${postId}/comments`);
+        setComments(res.data);
     };
+
+    if (!post) return <div className="community-postview-root">로딩 중...</div>;
 
     return (
         <div className="community-postview-root">
@@ -47,13 +69,13 @@ function CommunityPostView() {
                     ← 목록으로
                 </button>
                 <div className="community-postview-header">
-                    <h2>{dummyPost.title}</h2>
+                    <h2>{post.title}</h2>
                     <div className="community-postview-meta">
-                        <span>{dummyPost.author}</span>
-                        <span>{dummyPost.date}</span>
+                        <span>{post.author}</span>
+                        <span>{post.createdAt ? post.createdAt.slice(0, 10) : ''}</span>
                     </div>
                 </div>
-                <div className="community-postview-content">{dummyPost.content}</div>
+                <div className="community-postview-content">{post.content}</div>
                 <div className="community-postview-actions">
                     <button className="like-btn" onClick={handleLike}>추천 {likes}</button>
                     <button className="report-btn" onClick={handleReport}>신고</button>
@@ -75,7 +97,7 @@ function CommunityPostView() {
                             <li key={c.id} className="comment-item">
                                 <div className="comment-author">{c.author}</div>
                                 <div className="comment-content">{c.content}</div>
-                                <div className="comment-date">{c.date}</div>
+                                <div className="comment-date">{c.createdAt ? c.createdAt.slice(0, 10) : c.date}</div>
                             </li>
                         ))}
                     </ul>

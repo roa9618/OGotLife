@@ -1,15 +1,29 @@
 import React, { useState } from "react";
 import "../styles/CommunityWrite.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function CommunityWrite() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate("/community");
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+        try {
+            await axios.post('/api/community/post', {
+                title,
+                content,
+                author: username
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            navigate("/community");
+        } catch (err) {
+            alert('글 등록 실패: ' + (err.response?.data || ''));
+        }
     };
 
     return (

@@ -1,39 +1,56 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import axios from 'axios';
 import '../styles/Routine.css';
 
 function Routine() {
-    const [routines, setRoutines] = useState([
-        { id: 1, title: '아침 운동', desc: '30분 스트레칭과 산책', icon: '💪' },
-        { id: 2, title: '영어 단어 암기', desc: '매일 20개씩 외우기', icon: '📚' },
-        { id: 3, title: '책 읽기', desc: '자기 전 20분 독서', icon: '📖' }
-    ]);
+    const [routines, setRoutines] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [newTitle, setNewTitle] = useState('');
     const [newDesc, setNewDesc] = useState('');
     const [newIcon, setNewIcon] = useState('🌟');
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
 
-    const handleAddRoutine = (e) => {
+    useEffect(() => {
+        if (!userId) return;
+        axios.get(`/api/routine/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setRoutines(res.data));
+    }, [userId, token]);
+
+    const handleAddRoutine = async (e) => {
         e.preventDefault();
         if (!newTitle.trim()) return;
-        setRoutines([
-            ...routines,
-            {
-                id: Date.now(),
-                title: newTitle,
-                desc: newDesc,
-                icon: newIcon
-            }
-        ]);
+        await axios.post('/api/routine', {
+            title: newTitle,
+            description: newDesc,
+            icon: newIcon,
+            user: { id: userId }
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         setNewTitle('');
         setNewDesc('');
         setNewIcon('🌟');
         setModalOpen(false);
+        // 목록 새로고침
+        const res = await axios.get(`/api/routine/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setRoutines(res.data);
     };
 
-    const handleDelete = (id) => {
-        setRoutines(routines.filter(r => r.id !== id));
+    const handleDelete = async (id) => {
+        await axios.delete(`/api/routine/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        // 목록 새로고침
+        const res = await axios.get(`/api/routine/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setRoutines(res.data);
     };
 
     return (
@@ -55,7 +72,7 @@ function Routine() {
                             <span className="routine-card-icon">{routine.icon}</span>
                             <div className="routine-card-content">
                                 <span className="routine-card-title">{routine.title}</span>
-                                <span className="routine-card-desc">{routine.desc}</span>
+                                <span className="routine-card-desc">{routine.description}</span>
                             </div>
                             <div className="routine-card-actions">
                                 <button className="routine-delete-btn" onClick={() => handleDelete(routine.id)}>삭제</button>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import axios from 'axios';
 import '../styles/Calendar.css';
 
 function getDaysArray(year, month) {
@@ -30,14 +31,21 @@ function Calendar() {
         year: todayObj.getFullYear(),
         month: todayObj.getMonth()
     });
-    const [events, setEvents] = useState([
-        { date: '2025-06-16', text: '스터디 모임' },
-        { date: '2025-06-16', text: '프로젝트 마감' }
-    ]);
+    const [events, setEvents] = useState([]);
     const [modal, setModal] = useState({ open: false, date: '', text: '', editIdx: null });
 
     const days = getDaysArray(current.year, current.month);
     const monthStr = `${current.year}년 ${current.month + 1}월`;
+
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (!userId) return;
+        axios.get(`/api/calendar/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setEvents(res.data));
+    }, [userId, token, current.year, current.month]);
 
     const handlePrev = () => {
         setCurrent(c => {
@@ -64,21 +72,47 @@ function Calendar() {
 
     const closeModal = () => setModal({ open: false, date: '', text: '', editIdx: null });
 
-    const handleModalSubmit = (e) => {
+    const handleModalSubmit = async (e) => {
         e.preventDefault();
         if (!modal.text.trim()) return;
         if (modal.editIdx !== null) {
-            setEvents(events.map((ev, i) =>
-                i === modal.editIdx ? { ...ev, text: modal.text } : ev
-            ));
+            // 수정
+            const eventId = events[modal.editIdx].id;
+            await axios.put(`/api/calendar/${eventId}`, {
+                date: modal.date,
+                text: modal.text,
+                user: { id: userId }
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
         } else {
-            setEvents([...events, { date: modal.date, text: modal.text }]);
+            // 추가
+            await axios.post('/api/calendar', {
+                date: modal.date,
+                text: modal.text,
+                user: { id: userId }
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
         }
+        // 목록 새로고침
+        const res = await axios.get(`/api/calendar/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setEvents(res.data);
         closeModal();
     };
 
-    const handleDelete = (idx) => {
-        setEvents(events.filter((_, i) => i !== idx));
+    const handleDelete = async (idx) => {
+        const eventId = events[idx].id;
+        await axios.delete(`/api/calendar/${eventId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        // 목록 새로고침
+        const res = await axios.get(`/api/calendar/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setEvents(res.data);
         closeModal();
     };
 

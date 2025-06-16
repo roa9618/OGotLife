@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../styles/myPageTab.css";
 
 function MyScraps() {
-    const scraps = [
-        { id: 1, title: "스크랩한 글1", author: "홍길동", date: "2024-06-01" },
-        { id: 2, title: "스크랩한 글2", author: "김철수", date: "2024-06-02" },
-    ];
+    const [scraps, setScraps] = useState([]);
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (!userId) return;
+        axios.get(`/api/mypage/scraps/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setScraps(res.data));
+    }, [userId, token]);
 
     return (
         <div className="mypage-tab-root">
@@ -18,9 +25,9 @@ function MyScraps() {
             <div className="mypage-list">
                 {scraps.map(scrap => (
                     <div className="mypage-list-row" key={scrap.id}>
-                        <span className="mypage-col-title">{scrap.title}</span>
-                        <span className="mypage-col-author">{scrap.author}</span>
-                        <span className="mypage-col-date">{scrap.date}</span>
+                        <span className="mypage-col-title">{scrap.post?.title}</span>
+                        <span className="mypage-col-author">{scrap.post?.author}</span>
+                        <span className="mypage-col-date">{scrap.post?.createdAt ? scrap.post.createdAt.slice(0, 10) : ''}</span>
                     </div>
                 ))}
             </div>

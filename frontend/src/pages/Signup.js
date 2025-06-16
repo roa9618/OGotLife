@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/Login.css';
 
 function Signup() {
@@ -7,15 +8,32 @@ function Signup() {
     const [pw, setPw] = useState('');
     const [pw2, setPw2] = useState('');
     const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (pw !== pw2) {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
-        // 회원가입 로직 (예시)
-        alert('회원가입 시도: ' + id);
+        setLoading(true);
+        try {
+            await axios.post('/api/user/signup', {
+                username: id,
+                password: pw,
+                email: email
+            });
+            alert('회원가입이 완료되었습니다. 로그인 해주세요.');
+            window.location.href = '/login';
+        } catch (err) {
+            if (err.response && err.response.data) {
+                alert(err.response.data);
+            } else {
+                alert('회원가입에 실패했습니다.');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -52,7 +70,9 @@ function Signup() {
                         onChange={e => setPw2(e.target.value)}
                         className="login-input"
                     />
-                    <button type="submit" className="login-btn">회원가입</button>
+                    <button type="submit" className="login-btn" disabled={loading}>
+                        {loading ? '가입 중...' : '회원가입'}
+                    </button>
                 </form>
                 <div className="login-bottom">
                     <Link to="/login" className="login-link">로그인</Link>

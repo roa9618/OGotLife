@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/ProfileDropdown.css";
 import "../styles/ProfileViewPage.css";
 import defaultProfileImage from "../assets/default_profile_image.png";
 
 function ProfileView() {
     const navigate = useNavigate();
+    const [profile, setProfile] = useState(null);
+    const username = localStorage.getItem("username"); // 또는 context 등에서 가져오기
+
+    useEffect(() => {
+        if (!username) return;
+        axios.get(`/api/user/profile/${username}`)
+            .then(res => setProfile(res.data))
+            .catch(() => setProfile(null));
+    }, [username]);
+
+    if (!profile) {
+        return <div className="profileview-root">로딩 중...</div>;
+    }
 
     return (
         <div className="profileview-root">
@@ -19,27 +33,19 @@ function ProfileView() {
                 <div className="profileview-img-wrap">
                     <img
                         className="profileview-img"
-                        src={defaultProfileImage}
+                        src={profile.profileImage || defaultProfileImage}
                         alt="프로필"
                     />
                 </div>
                 <div className="profileview-info">
-                    <div className="profileview-name">홍길동</div>
-                    <div className="profileview-email">honggildong@email.com</div>
+                    <div className="profileview-name">{profile.nickname || profile.username}</div>
+                    <div className="profileview-email">{profile.email}</div>
                     <div className="profileview-desc">
-                        자기소개나 한 줄 소개가 여기에 들어갑니다.<br />
-                        (예시) 꾸준히 성장하는 개발자!
+                        {profile.description || "자기소개가 없습니다."}
                     </div>
                 </div>
             </div>
-            <div className="profileview-section">
-                <div>
-                    <b>가입일</b> : 2024-01-01
-                </div>
-                <div>
-                    <b>최근 접속</b> : 2024-06-01 14:22
-                </div>
-            </div>
+            {/* 가입일, 최근 접속 등은 백엔드에 필드가 있으면 추가 */}
         </div>
     );
 }

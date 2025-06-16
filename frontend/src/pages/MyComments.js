@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../styles/myPageTab.css";
 
 function MyComments() {
-    const comments = [
-        { id: 1, content: "좋은 글이네요!", postTitle: "첫 번째 글", date: "2024-06-01" },
-        { id: 2, content: "동의합니다.", postTitle: "두 번째 글", date: "2024-06-02" },
-        { id: 3, content: "감사합니다.", postTitle: "세 번째 글", date: "2024-06-03" },
-    ];
+    const [comments, setComments] = useState([]);
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (!userId) return;
+        axios.get(`/api/mypage/comments/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setComments(res.data));
+    }, [userId, token]);
 
     return (
         <div className="mypage-tab-root">
@@ -21,7 +27,7 @@ function MyComments() {
                     <div className="mypage-list-row" key={comment.id}>
                         <span className="mypage-col-content">{comment.content}</span>
                         <span className="mypage-col-post">{comment.postTitle}</span>
-                        <span className="mypage-col-date">{comment.date}</span>
+                        <span className="mypage-col-date">{comment.createdAt ? comment.createdAt.slice(0, 10) : comment.date}</span>
                     </div>
                 ))}
             </div>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import axios from 'axios';
 import '../styles/Record.css';
 
 const EMOTIONS = [
@@ -16,63 +17,36 @@ const PAGE_SIZE = 4;
 function Record() {
     const [emotion, setEmotion] = useState('');
     const [diary, setDiary] = useState('');
-    const [records, setRecords] = useState([
-        {
-            id: 1,
-            date: '2023-04-08',
-            emotion: '😄',
-            diary: '오늘은 정말 뿌듯한 하루였다! 목표한 공부를 모두 끝냈다.',
-        },
-        {
-            id: 2,
-            date: '2023-04-07',
-            emotion: '😐',
-            diary: '조금 피곤했지만 그래도 할 일은 했다.',
-        },
-        {
-            id: 3,
-            date: '2023-04-06',
-            emotion: '😭',
-            diary: '오늘은 힘든 하루였다. 내일은 더 나아지길.',
-        },
-        {
-            id: 4,
-            date: '2023-04-05',
-            emotion: '🙂',
-            diary: '산책을 하며 기분이 좋아졌다.',
-        },
-        {
-            id: 5,
-            date: '2023-04-04',
-            emotion: '😔',
-            diary: '공부가 잘 안돼서 속상했다.',
-        },
-        {
-            id: 6,
-            date: '2023-04-03',
-            emotion: '😄',
-            diary: '친구와 맛있는 저녁을 먹었다!',
-        },
-    ]);
+    const [records, setRecords] = useState([]);
     const [page, setPage] = useState(1);
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
 
-    const totalPages = Math.ceil(records.length / PAGE_SIZE);
+    useEffect(() => {
+        if (!userId) return;
+        axios.get(`/api/record/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => setRecords(res.data));
+    }, [userId, token]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!emotion || !diary.trim()) return;
-        setRecords([
-            {
-                id: Date.now(),
-                date: new Date().toISOString().slice(0, 10),
-                emotion,
-                diary,
-            },
-            ...records,
-        ]);
+        await axios.post('/api/record', {
+            emotion,
+            diary,
+            user: { id: userId }
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         setEmotion('');
         setDiary('');
         setPage(1);
+        // 목록 새로고침
+        const res = await axios.get(`/api/record/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setRecords(res.data);
     };
 
     const pagedRecords = records.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -129,7 +103,7 @@ function Record() {
                         </div>
                     ))}
                 </div>
-                {totalPages > 1 && (
+                {Math.ceil(records.length / PAGE_SIZE) > 1 && (
                     <div className="record-pagination">
                         <button
                             className="record-page-btn"
@@ -138,7 +112,7 @@ function Record() {
                         >
                             &lt;
                         </button>
-                        {Array.from({ length: totalPages }, (_, i) => (
+                        {Array.from({ length: Math.ceil(records.length / PAGE_SIZE) }, (_, i) => (
                             <button
                                 key={i + 1}
                                 className={`record-page-btn${page === i + 1 ? ' active' : ''}`}
@@ -150,7 +124,7 @@ function Record() {
                         <button
                             className="record-page-btn"
                             onClick={() => setPage(page + 1)}
-                            disabled={page === totalPages}
+                            disabled={page === Math.ceil(records.length / PAGE_SIZE)}
                         >
                             &gt;
                         </button>
