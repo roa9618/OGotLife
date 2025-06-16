@@ -5,6 +5,11 @@ import logo_image from '../assets/ogotlife_logo.png';
 import alarm_image from '../assets/alarm_image.png';
 import profile_image from '../assets/default_profile_image.png';
 import profile_side_icon from '../assets/header_profile_side_image.png';
+import laptop from '../assets/header_profile_laptop.png';
+import logout from '../assets/header_profile_logout.png';
+import setting from '../assets/header_profile_setting.png';
+import user from '../assets/header_profile_user.png';
+import message from '../assets/header_profile_message.png';
 
 function Header() {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -93,23 +98,23 @@ function Header() {
                         <div className="profile-dropdown-menu">
                             <ul>
                                 <li>
-                                    <img src="/icons/profile_user.svg" alt="" className="profile-menu-icon" />
+                                    <img src={user} alt="" className="profile-menu-icon" />
                                     내 프로필 보기
                                 </li>
                                 <li>
-                                    <img src="/icons/profile_setting.svg" alt="" className="profile-menu-icon" />
+                                    <img src={setting} alt="" className="profile-menu-icon" />
                                     계정 설정
                                 </li>
                                 <li>
-                                    <img src="/icons/profile_env.svg" alt="" className="profile-menu-icon" />
+                                    <img src={laptop} alt="" className="profile-menu-icon" />
                                     환경 설정
                                 </li>
                                 <li>
-                                    <img src="/icons/profile_qna.svg" alt="" className="profile-menu-icon" />
+                                    <img src={message} alt="" className="profile-menu-icon" />
                                     문의하기
                                 </li>
                                 <li>
-                                    <img src="/icons/profile_logout.svg" alt="" className="profile-menu-icon" />
+                                    <img src={logout} alt="" className="profile-menu-icon" />
                                     로그아웃
                                 </li>
                             </ul>
