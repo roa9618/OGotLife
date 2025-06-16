@@ -83,6 +83,49 @@
     font-weight: 500;
 }
 
+.dashboard-progress-bar-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.dashboard-progress-comment {
+    position: absolute;
+    top: -36px;
+    min-width: 48px;
+    background: #4e6cff;
+    color: #fff;
+    font-size: 0.98rem;
+    font-weight: 600;
+    padding: 6px 14px 5px 14px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(78, 108, 255, 0.10);
+    z-index: 2;
+    transition: left 0.5s;
+    pointer-events: none;
+}
+
+.dashboard-progress-comment-arrow {
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -8px;
+    width: 16px;
+    height: 8px;
+    background: transparent;
+}
+
+.dashboard-progress-comment-arrow::after {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='8' viewBox='0 0 16 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 8L0 0H16L8 8Z' fill='%234e6cff'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .dashboard-daily-row {
     display: flex;
     gap: 18px;
@@ -128,28 +171,34 @@
     padding: 24px 28px 20px 28px;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
     min-width: 0;
 }
 .dashboard-streak-title, .dashboard-timetable-title {
     font-size: 1.05rem;
     font-weight: 600;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
     color: #222;
 }
 
 .dashboard-streak-heatmap {
     display: grid;
-    grid-template-columns: repeat(7, 18px);
-    grid-auto-rows: 18px;
-    gap: 4px;
+    grid-template-columns: repeat(14, 20px);
+    grid-template-rows: repeat(7, 20px);
+    gap: 8px;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 12px 0 8px 0;
 }
 .dashboard-streak-cell {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
     background: #e6eaf3;
     border: 1px solid #e6eaf3;
     transition: background 0.3s;
+    box-sizing: border-box;
 }
 .dashboard-streak-cell-0 { background: #e6eaf3; }
 .dashboard-streak-cell-1 { background: #b6d0ff; }
