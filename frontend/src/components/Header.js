@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../styles/Header.css';
 import logo_image from '../assets/ogotlife_logo.png';
@@ -7,6 +7,23 @@ import profile_image from '../assets/default_profile_image.png';
 import profile_side_icon from '../assets/header_profile_side_image.png';
 
 function Header() {
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const profileNameRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (profileNameRef.current && !profileNameRef.current.contains(event.target)) {
+                setShowProfileMenu(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const handleProfileMenuToggle = () => {
+        setShowProfileMenu((prev) => !prev);
+    };
+
     return (
         <header className = "header">
             <div className = "logo">
@@ -25,9 +42,80 @@ function Header() {
             </div>
             <div className = "right_section">
                 <img src = {alarm_image} alt = "alarm" className = "alarm_image"/>
-                <img src = {profile_image} alt = "profile" className = "profile_image"/>
-                <a href = "#">홍길동</a>
-                <img src = {profile_side_icon} alt = "profile_side_icon" className = "profile_side_icon"/>
+                <div className="header-profile-name-wrap" ref={profileNameRef}>
+                    <img
+                        src={profile_image}
+                        alt="프로필"
+                        className="profile_image"
+                        style={{ cursor: "pointer" }}
+                        onClick={handleProfileMenuToggle}
+                        tabIndex={0}
+                        role="button"
+                        aria-label="프로필 메뉴 열기"
+                        onKeyDown={e => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                handleProfileMenuToggle();
+                            }
+                        }}
+                    />
+                    <span
+                        className="header-profile-name-link"
+                        tabIndex={0}
+                        role="link"
+                        onClick={handleProfileMenuToggle}
+                        onKeyDown={e => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                handleProfileMenuToggle();
+                            }
+                        }}
+                    >
+                        홍길동
+                    </span>
+                    <span
+                        className="profile-triangle-btn"
+                        tabIndex={0}
+                        role="button"
+                        aria-label="프로필 메뉴 열기"
+                        onClick={handleProfileMenuToggle}
+                        onKeyDown={e => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                handleProfileMenuToggle();
+                            }
+                        }}
+                    >
+                        <img
+                            src={profile_side_icon}
+                            alt="아래"
+                            className="profile_side_icon"
+                        />
+                    </span>
+                    {showProfileMenu && (
+                        <div className="profile-dropdown-menu">
+                            <ul>
+                                <li>
+                                    <img src="/icons/profile_user.svg" alt="" className="profile-menu-icon" />
+                                    내 프로필 보기
+                                </li>
+                                <li>
+                                    <img src="/icons/profile_setting.svg" alt="" className="profile-menu-icon" />
+                                    계정 설정
+                                </li>
+                                <li>
+                                    <img src="/icons/profile_env.svg" alt="" className="profile-menu-icon" />
+                                    환경 설정
+                                </li>
+                                <li>
+                                    <img src="/icons/profile_qna.svg" alt="" className="profile-menu-icon" />
+                                    문의하기
+                                </li>
+                                <li>
+                                    <img src="/icons/profile_logout.svg" alt="" className="profile-menu-icon" />
+                                    로그아웃
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
             </div>
         </header>
     );

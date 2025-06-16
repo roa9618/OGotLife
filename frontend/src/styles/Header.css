@@ -49,8 +49,9 @@
     width: 30px;
     height: 30px;
     border-radius: 8px;
-    margin-right: 1px;
+    margin-right: 6px;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .right_section {
@@ -66,6 +67,14 @@
     text-decoration: none;
 }
 
+.profile-triangle-btn {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin-left: 0;
+    cursor: pointer;
+}
+
 .profile_side_icon {
     width: 10px;
     height: 10px;
@@ -76,4 +85,81 @@
 .header-menu-item.active {
   color: #4e6cff;
   font-weight: bold;
+}
+
+.header-profile-name-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.header-profile-name-link {
+    color: #111;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 0;
+    margin-right: 2px;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    user-select: none;
+    display: inline;
+    vertical-align: middle;
+}
+
+.header-profile-name-link:hover {
+    color: #4e6cff;
+    background: none;
+}
+
+.profile-dropdown-menu {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 210px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(77, 111, 238, 0.13);
+    padding: 12px 0;
+    z-index: 100;
+    animation: slideDownMenu 0.18s cubic-bezier(.4,1.2,.6,1) both;
+}
+
+@keyframes slideDownMenu {
+    from { opacity: 0; transform: translateX(-50%) translateY(-10px);}
+    to { opacity: 1; transform: translateX(-50%) translateY(0);}
+}
+
+.profile-dropdown-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-dropdown-menu li {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 12px 22px;
+    font-size: 17px;
+    color: #888;
+    cursor: pointer;
+    transition: background 0.13s, color 0.13s;
+    border-radius: 8px;
+}
+
+.profile-dropdown-menu li:hover {
+    background: #f4f6fb;
+    color: #4e6cff;
+}
+
+.profile-menu-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    display: inline-block;
 }
