@@ -1,0 +1,73 @@
+.community-write-root {
+    min-height: 100vh;
+    background: #f4f6fb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.community-write-container {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(78, 108, 255, 0.07);
+    padding: 40px 32px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.community-write-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 28px;
+    color: #4e6cff;
+    text-align: center;
+}
+
+.community-write-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.community-write-input {
+    padding: 12px;
+    border: 1px solid #e6eaf3;
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+.community-write-textarea {
+    min-height: 160px;
+    padding: 12px;
+    border: 1px solid #e6eaf3;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    resize: vertical;
+}
+
+.community-write-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.community-write-cancel {
+    background: #e6eaf3;
+    color: #555;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.community-write-submit {
+    background: linear-gradient(90deg, #6a8dff 0%, #4e6cff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
