@@ -10,15 +10,25 @@ import logout from '../assets/header_profile_logout.png';
 import setting from '../assets/header_profile_setting.png';
 import user from '../assets/header_profile_user.png';
 import message from '../assets/header_profile_message.png';
+import alarmComment from '../assets/header_alarm_message.png';
+import alarmLike from '../assets/header_alarm_heart.png';
+import alarmNotice from '../assets/header_alarm_check.png';
+import alarmReply from '../assets/header_alarm_comment.png';
 
 function Header() {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [showAlarmMenu, setShowAlarmMenu] = useState(false);
     const profileNameRef = useRef(null);
+    const alarmRef = useRef(null);
 
     useEffect(() => {
         function handleClickOutside(event) {
-            if (profileNameRef.current && !profileNameRef.current.contains(event.target)) {
+            if (
+                profileNameRef.current && !profileNameRef.current.contains(event.target) &&
+                alarmRef.current && !alarmRef.current.contains(event.target)
+            ) {
                 setShowProfileMenu(false);
+                setShowAlarmMenu(false);
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -27,14 +37,43 @@ function Header() {
 
     const handleProfileMenuToggle = () => {
         setShowProfileMenu((prev) => !prev);
+        setShowAlarmMenu(false);
     };
 
+    const handleAlarmMenuToggle = () => {
+        setShowAlarmMenu((prev) => !prev);
+        setShowProfileMenu(false);
+    };
+
+    const alarms = [
+        {
+            icon: alarmComment,
+            content: <><b>홍길동</b>님이 댓글을 남겼습니다.</>,
+            time: "1시간전"
+        },
+        {
+            icon: alarmLike,
+            content: <><b>홍길동</b>님이 공감을 남겼습니다.</>,
+            time: "2시간전"
+        },
+        {
+            icon: alarmNotice,
+            content: <> <b>아침일찍 일어나는법</b>의 조회수가 <b>100</b>이 넘었습니다.</>,
+            time: "7시간전"
+        },
+        {
+            icon: alarmReply,
+            content: <>문의사항에 답변이 달렸습니다.</>,
+            time: "1일전"
+        }
+    ];
+
     return (
-        <header className = "header">
-            <div className = "logo">
-                <img src = {logo_image} alt = "main_logo" className = "logo"/>
+        <header className="header">
+            <div className="logo">
+                <img src={logo_image} alt="main_logo" className="logo" />
             </div>
-            <div className = "menu">
+            <div className="menu">
                 <ul>
                     <li><NavLink to="/dashboard" className="header-menu-item" activeClassName="active">대시보드</NavLink></li>
                     <li><NavLink to="/routine" className="header-menu-item" activeClassName="active">루틴</NavLink></li>
@@ -45,8 +84,43 @@ function Header() {
                     <li><NavLink to="/community" className="header-menu-item" activeClassName="active">커뮤니티</NavLink></li>
                 </ul>
             </div>
-            <div className = "right_section">
-                <img src = {alarm_image} alt = "alarm" className = "alarm_image"/>
+            <div className="right_section">
+                <div className="header-alarm-wrap" ref={alarmRef}>
+                    <img
+                        src={alarm_image}
+                        alt="알람"
+                        className="alarm_image"
+                        style={{ cursor: "pointer" }}
+                        onClick={handleAlarmMenuToggle}
+                        tabIndex={0}
+                        role="button"
+                        aria-label="알림 메뉴 열기"
+                        onKeyDown={e => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                handleAlarmMenuToggle();
+                            }
+                        }}
+                    />
+                    {showAlarmMenu && (
+                        <div className="alarm-dropdown-menu">
+                            <ul className="alarm-list">
+                                {alarms.map((alarm, idx) => (
+                                    <li className="alarm-item" key={idx}>
+                                        <img src={alarm.icon} alt="" className="alarm-item-icon" />
+                                        <div className="alarm-item-content">
+                                            <div className="alarm-item-text">{alarm.content}</div>
+                                            <div className="alarm-item-time">{alarm.time}</div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="alarm-menu-bottom">
+                                <button className="alarm-menu-btn read-all">모두 읽음 처리</button>
+                                <button className="alarm-menu-btn more">더보기</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
                 <div className="header-profile-name-wrap" ref={profileNameRef}>
                     <img
                         src={profile_image}

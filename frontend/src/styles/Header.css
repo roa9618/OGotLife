@@ -163,3 +163,119 @@
     flex-shrink: 0;
     display: inline-block;
 }
+
+.header-alarm-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.alarm-dropdown-menu {
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 280px;
+    max-width: 320px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(77, 111, 238, 0.13);
+    padding: 18px 0 0 0;
+    z-index: 100;
+    animation: slideDownMenu 0.18s cubic-bezier(.4,1.2,.6,1) both;
+}
+
+.alarm-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.alarm-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 14px 24px 10px 24px;
+    border-bottom: 1px solid #f4f6fb;
+}
+
+.alarm-item:last-child {
+    border-bottom: none;
+}
+
+.alarm-item-icon {
+    width: 24px;
+    height: 24px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.alarm-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.alarm-item-text {
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 3px;
+    line-height: 1.5;
+    word-break: keep-all;
+}
+
+.alarm-item-text b {
+    font-weight: 700;
+    color: #111;
+}
+
+.alarm-item-time {
+    font-size: 13px;
+    color: #bbb;
+    margin-top: 0;
+}
+
+.alarm-menu-bottom {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 16px 18px 12px 18px;
+    background: #fff;
+    border-radius: 0 0 14px 14px;
+    border-top: 1px solid #f4f6fb;
+}
+
+.alarm-menu-btn {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    border: 1px solid #e6eaf3;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: background 0.13s, border 0.13s;
+}
+
+.alarm-menu-btn.read-all {
+    border: 1.5px solid #4e6cff;
+    color: #4e6cff;
+    background: #fff;
+}
+
+.alarm-menu-btn.read-all:hover {
+    background: #f4f6fb;
+}
+
+.alarm-menu-btn.more {
+    border: 1px solid #e6eaf3;
+    color: #bbb;
+    background: #fafbfc;
+}
+
+.alarm-menu-btn.more:hover {
+    background: #f4f6fb;
+}
