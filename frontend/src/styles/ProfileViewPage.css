@@ -1,0 +1,104 @@
+.profileview-root {
+    max-width: 480px;
+    margin: 40px auto 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(78, 108, 255, 0.07);
+    padding: 32px 28px 36px 28px;
+}
+
+.profileview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.profileview-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #4e6cff;
+    margin: 0;
+}
+
+.profileview-main-btn {
+    background: linear-gradient(90deg, #6a8dff 0%, #4e6cff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(78, 108, 255, 0.08);
+    transition: background 0.15s;
+}
+
+.profileview-main-btn:hover {
+    background: #4e6cff;
+}
+
+.profileview-card {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    background: #f7f9fc;
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 8px rgba(78, 108, 255, 0.04);
+}
+
+.profileview-img-wrap {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profileview-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #e3e6ef;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(77, 111, 238, 0.08);
+}
+
+.profileview-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.profileview-name {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #222;
+}
+
+.profileview-email {
+    font-size: 1rem;
+    color: #4e6cff;
+    font-weight: 500;
+}
+
+.profileview-desc {
+    font-size: 0.98rem;
+    color: #555;
+    margin-top: 4px;
+    line-height: 1.5;
+}
+
+.profileview-section {
+    background: #f4f6fb;
+    border-radius: 10px;
+    padding: 18px 20px;
+    color: #444;
+    font-size: 1.05rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
