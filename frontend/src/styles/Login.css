@@ -1,0 +1,125 @@
+.login-root {
+    min-height: 100vh;
+    background: linear-gradient(120deg, #eaf0ff 0%, #f7f9fc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(78,108,255,0.10);
+    padding: 40px 36px 32px 36px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #4e6cff;
+    margin-bottom: 28px;
+    letter-spacing: -1px;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.login-input {
+    padding: 12px 14px;
+    border: 1.5px solid #e6eaf3;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.18s;
+}
+.login-input:focus {
+    border: 1.5px solid #4e6cff;
+}
+
+.login-btn {
+    margin-top: 8px;
+    padding: 12px 0;
+    background: linear-gradient(90deg, #6a8dff 0%, #4e6cff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.login-btn:hover {
+    background: linear-gradient(90deg, #4e6cff 0%, #6a8dff 100%);
+}
+
+.login-bottom {
+    margin-top: 18px;
+    font-size: 0.98rem;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login-link {
+    color: #4e6cff;
+    text-decoration: none;
+    font-weight: 500;
+}
+.login-link:hover {
+    text-decoration: underline;
+}
+
+.login-divider {
+    color: #bbb;
+    font-size: 1.1em;
+}
+
+.login-main-link {
+    margin-top: 18px;
+    text-align: center;
+}
+
+.login-result {
+    margin-top: 18px;
+    color: #4e6cff;
+    font-weight: 500;
+    text-align: center;
+}
+
+.findaccount-tab-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    justify-content: center;
+}
+
+.findaccount-tab-btn {
+    background: #f7f9fc;
+    color: #4e6cff;
+    border: 1.5px solid #e6eaf3;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, border 0.18s;
+    outline: none;
+}
+.findaccount-tab-btn.active {
+    background: #fff;
+    color: #222;
+    border-bottom: 2.5px solid #4e6cff;
+    border-top: 2.5px solid #4e6cff;
+    border-left: 2.5px solid #4e6cff;
+    border-right: 2.5px solid #4e6cff;
+    z-index: 1;
+}
