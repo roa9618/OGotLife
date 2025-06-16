@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { NavLink, useNavigate, Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import "../styles/Header.css";
 import logo_image from '../assets/ogotlife_logo.png';
 import alarm_image from '../assets/alarm_image.png';
@@ -20,7 +20,6 @@ function Header() {
     const [showAlarmMenu, setShowAlarmMenu] = useState(false);
     const profileNameRef = useRef(null);
     const alarmRef = useRef(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         function handleClickOutside(event) {
