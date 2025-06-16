@@ -1,3 +1,53 @@
 body {
     background-color: #EEF1F9;
 }
+
+.blurred-root > *:not(.blur-overlay) {
+    filter: blur(4px) grayscale(0.1) brightness(0.95);
+    pointer-events: none;
+    user-select: none;
+}
+
+.blur-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 9999;
+    background: rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blur-message {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(78,108,255,0.10);
+    padding: 48px 36px 36px 36px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.blur-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #4e6cff;
+    margin-bottom: 28px;
+    letter-spacing: -1px;
+}
+
+.blur-login-btn {
+    padding: 12px 36px;
+    background: linear-gradient(90deg, #6a8dff 0%, #4e6cff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.blur-login-btn:hover {
+    background: linear-gradient(90deg, #4e6cff 0%, #6a8dff 100%);
+}
