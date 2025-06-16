@@ -18,6 +18,19 @@ function Dashboard() {
         { time: "16:30 - 16:55", task: "공부" },
     ];
     const totalStudy = "총 3시간 20분 진행";
+    const today = new Date();
+    const dailyData = Array.from({ length: 5 }).map((_, i) => {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        return {
+            date: date.toLocaleDateString("ko-KR", { month: "2-digit", day: "2-digit", weekday: "short" }),
+            todos: [
+                "일정을 입력해주세요.",
+                "일정을 입력해주세요.",
+                "일정을 입력해주세요."
+            ]
+        };
+    });
 
     return (
         <div className="dashboard-root">
@@ -38,7 +51,7 @@ function Dashboard() {
                         <div className="dashboard-grid">
                             <div className="dashboard-progress-row">
                                 <div className="dashboard-progress-card">
-                                    <div className="dashboard-progress-title">주간 목표 달성률</div>
+                                    <div className="dashboard-progress-title">오늘의 루틴 진행도</div>
                                     <div className="dashboard-progress-bar-wrap">
                                         <div
                                             className="dashboard-progress-comment"
@@ -56,7 +69,7 @@ function Dashboard() {
                                     </div>
                                 </div>
                                 <div className="dashboard-progress-card">
-                                    <div className="dashboard-progress-title">월간 목표 달성률</div>
+                                    <div className="dashboard-progress-title">오늘의 To Do 진행도</div>
                                     <div className="dashboard-progress-bar-wrap">
                                         <div
                                             className="dashboard-progress-comment"
@@ -75,13 +88,13 @@ function Dashboard() {
                                 </div>
                             </div>
                             <div className="dashboard-daily-row">
-                                {[4.07, 4.08, 4.09, 4.10, 4.11].map((date, idx) => (
-                                    <div className="dashboard-daily-card" key={date}>
-                                        <div className="dashboard-daily-date">{date}</div>
+                                {dailyData.map((day, idx) => (
+                                    <div className="dashboard-daily-card" key={idx}>
+                                        <div className="dashboard-daily-date">{day.date}</div>
                                         <ul className="dashboard-daily-list">
-                                            <li>일정을 입력해주세요.</li>
-                                            <li>일정을 입력해주세요.</li>
-                                            <li>일정을 입력해주세요.</li>
+                                            {day.todos.map((todo, i) => (
+                                                <li key={i}>{todo}</li>
+                                            ))}
                                         </ul>
                                     </div>
                                 ))}
