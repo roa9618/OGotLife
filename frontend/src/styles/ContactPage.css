@@ -1,0 +1,108 @@
+.contactpage-root {
+    max-width: 480px;
+    margin: 40px auto 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(78, 108, 255, 0.07);
+    padding: 32px 28px 36px 28px;
+}
+
+.contactpage-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.contactpage-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #4e6cff;
+    margin: 0;
+}
+
+.contactpage-main-btn {
+    background: linear-gradient(90deg, #6a8dff 0%, #4e6cff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(78, 108, 255, 0.08);
+    transition: background 0.15s;
+}
+
+.contactpage-main-btn:hover {
+    background: #4e6cff;
+}
+
+.contactpage-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 8px rgba(78, 108, 255, 0.04);
+}
+
+.contactpage-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 1.08rem;
+    color: #4e6cff;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.contactpage-info-icon {
+    font-size: 1.6rem;
+    margin-top: 2px;
+}
+
+.contactpage-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.contactpage-form label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.contactpage-form input,
+.contactpage-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e6eaf3;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fff;
+    transition: border 0.15s;
+}
+
+.contactpage-form input:focus,
+.contactpage-form textarea:focus {
+    border: 1.5px solid #4e6cff;
+    outline: none;
+}
+
+.contactpage-submit-btn {
+    margin-top: 10px;
+    background: #4e6cff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.contactpage-submit-btn:hover {
+    background: #6a8dff;
+}
