@@ -72,3 +72,8 @@
     margin-left: 5px;
     vertical-align: middle;
 }
+
+.header-menu-item.active {
+  color: #4e6cff;
+  font-weight: bold;
+}

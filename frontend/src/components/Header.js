@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import '../styles/Header.css';
 import logo_image from '../assets/ogotlife_logo.png';
 import alarm_image from '../assets/alarm_image.png';
@@ -13,13 +14,13 @@ function Header() {
             </div>
             <div className = "menu">
                 <ul>
-                    <li><a href = '#'>대시보드</a></li>
-                    <li><a href = '#'>루틴</a></li>
-                    <li><a href = '#'>To do</a></li>
-                    <li><a href = '#'>기록</a></li>
-                    <li><a href = '#'>캘린더</a></li>
-                    <li><a href = '#'>집중모드</a></li>
-                    <li><a href = '#'>커뮤니티</a></li>
+                    <li><NavLink to="/dashboard" className="header-menu-item" activeClassName="active">대시보드</NavLink></li>
+                    <li><NavLink to="/routine" className="header-menu-item" activeClassName="active">루틴</NavLink></li>
+                    <li><NavLink to="/todo" className="header-menu-item" activeClassName="active">To do</NavLink></li>
+                    <li><NavLink to="/record" className="header-menu-item" activeClassName="active">기록</NavLink></li>
+                    <li><NavLink to="/calendar" className="header-menu-item" activeClassName="active">캘린더</NavLink></li>
+                    <li><NavLink to="/focus" className="header-menu-item" activeClassName="active">집중모드</NavLink></li>
+                    <li><NavLink to="/community" className="header-menu-item" activeClassName="active">커뮤니티</NavLink></li>
                 </ul>
             </div>
             <div className = "right_section">
