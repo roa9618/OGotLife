@@ -9,15 +9,6 @@ function Dashboard() {
     const progress1 = 60;
     const progress2 = 75;
     const streakData = Array(14 * 7).fill(0).map((_, i) => Math.floor(Math.random() * 4));
-    const timeTable = [
-        { time: "12:00 - 12:35", task: "공부" },
-        { time: "13:00 - 13:25", task: "공부" },
-        { time: "15:00 - 15:25", task: "공부" },
-        { time: "15:30 - 15:55", task: "공부" },
-        { time: "16:00 - 16:25", task: "공부" },
-        { time: "16:30 - 16:55", task: "공부" },
-    ];
-    const totalStudy = "총 3시간 20분 진행";
     const today = new Date();
     const dailyData = Array.from({ length: 5 }).map((_, i) => {
         const date = new Date(today);
@@ -31,6 +22,13 @@ function Dashboard() {
             ]
         };
     });
+
+    const focusRecords = [
+        { time: "12:00 - 12:35", duration: 35 },
+        { time: "13:00 - 13:50", duration: 50 },
+        { time: "14:00 - 14:30", duration: 30 },
+        { time: "15:00 - 15:25", duration: 25 },
+    ];
 
     return (
         <div className="dashboard-root">
@@ -112,16 +110,17 @@ function Dashboard() {
                                     </div>
                                 </div>
                                 <div className="dashboard-timetable-card">
-                                    <div className="dashboard-timetable-title">집중도 기록</div>
-                                    <div className="dashboard-timetable-list">
-                                        {timeTable.map((item, i) => (
-                                            <div key={i} className="dashboard-timetable-item">
-                                                <span>{item.time}</span>
-                                                <span>{item.task}</span>
+                                    <div className="dashboard-timetable-header">
+                                        <span className="dashboard-timetable-title">집중모드 기록</span>
+                                    </div>
+                                    <div className="dashboard-focus-list">
+                                        {focusRecords.map((rec, i) => (
+                                            <div className="dashboard-focus-item" key={i}>
+                                                <span className="dashboard-focus-time">{rec.time}</span>
+                                                <span className="dashboard-focus-duration">{rec.duration}분</span>
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="dashboard-timetable-total">{totalStudy}</div>
                                 </div>
                             </div>
                         </div>
