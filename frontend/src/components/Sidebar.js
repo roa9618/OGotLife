@@ -7,7 +7,7 @@ import post_icon from '../assets/sidebar_post_icon.png';
 import comment_icon from '../assets/sidebar_comment_icon.png';
 import star_icon from '../assets/sidebar_star_icon.png';
 
-function Sidebar({ visible, onClose }) {
+function Sidebar({ visible, onClose, activeTab, onTabChange }) {
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
 
@@ -31,6 +31,11 @@ function Sidebar({ visible, onClose }) {
         return () => clearInterval(timer);
     }, []);
 
+    const currentTab = activeTab;
+    const handleTabChange = (tab) => {
+        if (onTabChange) onTabChange(tab);
+    };
+
     return (
         <aside className={`sidebar ${visible ? 'show' : 'hide'}`}>
             <button className="sidebar-close-btn" onClick={onClose}>
@@ -47,19 +52,40 @@ function Sidebar({ visible, onClose }) {
             <nav className="sidebar-nav">
                 <ul>
                     <li>
-                        <button className="sidebar-nav-title sidebar-nav-link">
+                        <button
+                            className={
+                                "sidebar-nav-title sidebar-nav-link" +
+                                (currentTab === "myposts" ? " active" : "")
+                            }
+                            onClick={() => handleTabChange("myposts")}
+                            type="button"
+                        >
                             <img src={post_icon} alt="작성글" className="sidebar-nav-icon"/>
                             작성글
                         </button>
                     </li>
                     <li>
-                        <button className="sidebar-nav-link">
+                        <button
+                            className={
+                                "sidebar-nav-link" +
+                                (currentTab === "mycomments" ? " active" : "")
+                            }
+                            onClick={() => handleTabChange("mycomments")}
+                            type="button"
+                        >
                             <img src={comment_icon} alt="작성댓글" className="sidebar-nav-icon"/>
                             작성댓글
                         </button>
                     </li>
                     <li>
-                        <button className="sidebar-nav-link">
+                        <button
+                            className={
+                                "sidebar-nav-link" +
+                                (currentTab === "myscraps" ? " active" : "")
+                            }
+                            onClick={() => handleTabChange("myscraps")}
+                            type="button"
+                        >
                             <img src={star_icon} alt="내 스크랩" className="sidebar-nav-icon"/>
                             내 스크랩
                         </button>

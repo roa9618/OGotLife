@@ -141,10 +141,24 @@
     margin-bottom: 12px;
     line-height: 1.2;
     gap: 12px;
+    width: calc(100% - 40px);
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .sidebar-nav-title:hover {
     background: #e3e6ef;
+}
+
+.sidebar-nav-link.active,
+.sidebar-nav-title.active {
+    background: #eaf0ff;
+    color: #4e6cff;
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: none;
+    box-shadow: none;
+    outline: none;
 }
 
 .sidebar-nav ul {
@@ -176,6 +190,9 @@
     margin-bottom: 12px;
     line-height: 1.2;
     gap: 12px;
+    width: calc(100% - 40px); /* 사이드바 내부 여백(좌우 20px씩)만큼 빼서 넘치지 않게 */
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .sidebar-nav-link:hover {
@@ -261,4 +278,12 @@
 .sidebar-open-btn:hover {
     background: #f0f4ff;
     border: 1.5px solid #4D6FEE;
+}
+
+.sidebar-nav-title,
+.sidebar-nav-link {
+    width: calc(100% - 40px); /* 좌우 20px씩 여백 */
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 12px 20px 12px 20px; /* 좌우 모두 20px로 맞춤 */
 }
