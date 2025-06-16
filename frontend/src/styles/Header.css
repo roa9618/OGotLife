@@ -172,7 +172,7 @@
 
 .alarm-dropdown-menu {
     position: absolute;
-    top: 120%;
+    top: 100%;
     left: 50%;
     transform: translateX(-50%);
     min-width: 280px;
@@ -278,4 +278,17 @@
 
 .alarm-menu-btn.more:hover {
     background: #f4f6fb;
+}
+
+.alarm-badge {
+    position: absolute;
+    top: 4px;
+    right: 22px;
+    width: 11px;
+    height: 11px;
+    background: #ff3b3b;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    z-index: 2;
 }

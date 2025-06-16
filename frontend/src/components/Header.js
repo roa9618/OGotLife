@@ -86,21 +86,26 @@ function Header() {
             </div>
             <div className="right_section">
                 <div className="header-alarm-wrap" ref={alarmRef}>
-                    <img
-                        src={alarm_image}
-                        alt="알람"
-                        className="alarm_image"
-                        style={{ cursor: "pointer" }}
-                        onClick={handleAlarmMenuToggle}
-                        tabIndex={0}
-                        role="button"
-                        aria-label="알림 메뉴 열기"
-                        onKeyDown={e => {
-                            if (e.key === "Enter" || e.key === " ") {
-                                handleAlarmMenuToggle();
-                            }
-                        }}
-                    />
+                    <span style={{ position: "relative", display: "inline-block" }}>
+                        <img
+                            src={alarm_image}
+                            alt="알람"
+                            className="alarm_image"
+                            style={{ cursor: "pointer" }}
+                            onClick={handleAlarmMenuToggle}
+                            tabIndex={0}
+                            role="button"
+                            aria-label="알림 메뉴 열기"
+                            onKeyDown={e => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    handleAlarmMenuToggle();
+                                }
+                            }}
+                        />
+                        {alarms.length > 0 && (
+                            <span className="alarm-badge"></span>
+                        )}
+                    </span>
                     {showAlarmMenu && (
                         <div className="alarm-dropdown-menu">
                             <ul className="alarm-list">
